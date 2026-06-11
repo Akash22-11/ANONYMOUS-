@@ -212,24 +212,6 @@ Safe Discussion
 
 ---
 
-# 📸 Screenshots
-
-## Landing Page
-
-<img src="./screenshots/landing.png"/>
-
----
-
-## Dashboard
-
-<img src="./screenshots/dashboard.png"/>
-
----
-
-## Feed
-
-<img src="./screenshots/feed.png"/>
-
 ---
 
 # 🚀 Quick Start
