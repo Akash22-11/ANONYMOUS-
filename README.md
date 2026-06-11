@@ -1,88 +1,148 @@
 <div align="center">
 
-# 🎭 ANONYMOUS
-### Connect. Share. Express. Anonymously.
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=700&size=38&pause=1000&color=7C3AED&center=true&vCenter=true&width=900&lines=🎭+ANONYMOUS;A+Safe+Space+for+Students;Connect+Without+Revealing+Identity;Built+with+Modern+Web+Technologies" />
 
-<p align="center">
-  A secure and engaging anonymous communication platform designed for college communities.
-</p>
+<br>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Version-1.0-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Open%20Source-Yes-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/github/license/Akash22-11/ANONYMOUS-?style=for-the-badge" />
-</p>
+<img src="https://img.shields.io/github/stars/Akash22-11/ANONYMOUS-?style=for-the-badge&color=7C3AED"/>
+<img src="https://img.shields.io/github/forks/Akash22-11/ANONYMOUS-?style=for-the-badge&color=06B6D4"/>
+<img src="https://img.shields.io/github/issues/Akash22-11/ANONYMOUS-?style=for-the-badge&color=F59E0B"/>
+<img src="https://img.shields.io/github/license/Akash22-11/ANONYMOUS-?style=for-the-badge&color=22C55E"/>
 
----
+<br><br>
 
-### 🚀 Live Demo
-
-🔗 **[Visit Website](YOUR_DEPLOYMENT_LINK)**
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7C3AED&height=250&section=header&text=ANONYMOUS&fontSize=70&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Anonymous%20College%20Communication%20Platform&descAlignY=60"/>
 
 </div>
 
 ---
 
-# ✨ Overview
+# 🌟 About The Project
 
-ANONYMOUS is a modern web platform that allows students to interact, ask questions, share opinions, and communicate freely without revealing their identity.
+> **ANONYMOUS** is a next-generation communication platform designed for college communities.
 
-Built with privacy-first principles, the platform encourages honest conversations while maintaining a safe and moderated environment.
+Students can:
+
+✨ Share opinions freely
+
+🎭 Stay anonymous
+
+💬 Interact with seniors & juniors
+
+🚀 Build meaningful discussions
+
+🔒 Maintain privacy
+
+without revealing their real identity.
 
 ---
 
-# 🌟 Key Features
+# 🎥 Project Preview
 
-### 👤 Anonymous Identity System
-- No real names displayed
-- Randomized user identities
-- Privacy-focused interactions
+<p align="center">
 
-### 💬 Real-Time Discussions
-- Instant message updates
-- Dynamic conversation threads
-- Community engagement
+<img src="https://media.giphy.com/media/f3iwJFOVOwuy7K6FFw/giphy.gif" width="700">
 
-### 🔒 Secure Authentication
-- Email Authentication
-- Google Login
+</p>
+
+---
+
+# ⚡ Features
+
+<table>
+<tr>
+
+<td width="50%">
+
+### 🎭 Anonymous Profiles
+
+- Hidden identity
+- Random usernames
+- Secure mapping
+
+</td>
+
+<td width="50%">
+
+### 💬 Live Discussions
+
+- Real-time messaging
+- Dynamic updates
+- Instant engagement
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width="50%">
+
+### 🔐 Secure Login
+
+- Google Authentication
+- Firebase Auth
 - Protected Routes
 
-### 📢 Public Confession Feed
-- Share thoughts anonymously
-- Community reactions
-- Trending discussions
+</td>
 
-### 🧠 Smart Moderation
-- Spam prevention
-- Toxicity filtering
-- Content reporting system
+<td width="50%">
 
-### ❤️ Community Interaction
-- Likes & Reactions
-- Replies
-- Threaded conversations
+### 📢 Public Feed
 
-### 📱 Responsive Design
+- Anonymous posting
+- Community discussions
+- Trending content
+
+</td>
+
+</tr>
+
+<tr>
+
+<td width="50%">
+
+### 🚨 Moderation System
+
+- Spam Detection
+- Report Abuse
+- Safe Environment
+
+</td>
+
+<td width="50%">
+
+### 📱 Responsive UI
+
 - Mobile Friendly
-- Tablet Optimized
-- Desktop Experience
+- Tablet Support
+- Desktop Optimized
+
+</td>
+
+</tr>
+
+</table>
 
 ---
 
-# 🏗️ System Architecture
+# 🏗 Architecture
 
 ```mermaid
-flowchart TD
+flowchart LR
 
-A[User] --> B[Frontend]
-B --> C[Authentication]
+A[Student User]
+--> B[Next.js Frontend]
+
+B --> C[Firebase Authentication]
+
 B --> D[API Layer]
 
-D --> E[Database]
-D --> F[Moderation Service]
-D --> G[Real-time Engine]
+D --> E[Firestore Database]
+
+D --> F[Moderation Engine]
+
+D --> G[Real-Time Services]
 
 F --> E
 G --> E
@@ -90,58 +150,64 @@ G --> E
 
 ---
 
-# 🛠️ Tech Stack
+# 🛠 Tech Stack
 
-## Frontend
+<div align="center">
 
-- ⚛️ React.js / Next.js
-- 🎨 Tailwind CSS
-- 🧩 TypeScript
-- 🔥 Firebase SDK
+### Frontend
 
-## Backend
+<img src="https://skillicons.dev/icons?i=nextjs,react,typescript,tailwind"/>
 
-- Node.js
-- Express.js
-- Firebase Functions
+### Backend
 
-## Database
+<img src="https://skillicons.dev/icons?i=nodejs,express,firebase"/>
 
-- Firestore Database
+### Database
 
-## Authentication
+<img src="https://skillicons.dev/icons?i=firebase"/>
 
-- Firebase Authentication
-- Google OAuth
+### Tools
 
-## Deployment
+<img src="https://skillicons.dev/icons?i=git,github,vscode"/>
 
-- Vercel
-- Firebase Hosting
+</div>
 
 ---
 
-# 📂 Project Structure
+# 📊 Repository Analytics
 
-```bash
-ANONYMOUS/
-│
-├── src/
-│   ├── app/
-│   ├── components/
-│   ├── hooks/
-│   ├── lib/
-│   ├── services/
-│   ├── types/
-│   └── utils/
-│
-├── public/
-│
-├── firebase/
-│
-├── docs/
-│
-└── README.md
+<div align="center">
+
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=Akash22-11&show_icons=true&theme=tokyonight"/>
+
+<img height="180em" src="https://github-readme-streak-stats.herokuapp.com/?user=Akash22-11&theme=tokyonight"/>
+
+</div>
+
+---
+
+# 🔥 Core Workflow
+
+```text
+User Sign Up
+      │
+      ▼
+Authentication
+      │
+      ▼
+Anonymous Identity Generated
+      │
+      ▼
+Create Post
+      │
+      ▼
+Community Interacts
+      │
+      ▼
+Moderation System
+      │
+      ▼
+Safe Discussion
 ```
 
 ---
@@ -150,23 +216,23 @@ ANONYMOUS/
 
 ## Landing Page
 
-![Landing](screenshots/landing.png)
-
-## Dashboard
-
-![Dashboard](screenshots/dashboard.png)
-
-## Anonymous Feed
-
-![Feed](screenshots/feed.png)
-
-## User Profile
-
-![Profile](screenshots/profile.png)
+<img src="./screenshots/landing.png"/>
 
 ---
 
-# 🚀 Getting Started
+## Dashboard
+
+<img src="./screenshots/dashboard.png"/>
+
+---
+
+## Feed
+
+<img src="./screenshots/feed.png"/>
+
+---
+
+# 🚀 Quick Start
 
 ### Clone Repository
 
@@ -174,7 +240,7 @@ ANONYMOUS/
 git clone https://github.com/Akash22-11/ANONYMOUS-.git
 ```
 
-### Move Into Project
+### Enter Project
 
 ```bash
 cd ANONYMOUS-
@@ -186,7 +252,7 @@ cd ANONYMOUS-
 npm install
 ```
 
-### Start Development Server
+### Run Development Server
 
 ```bash
 npm run dev
@@ -194,9 +260,7 @@ npm run dev
 
 ---
 
-# ⚙️ Environment Variables
-
-Create a `.env.local` file.
+# 🔐 Environment Variables
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=
@@ -209,71 +273,55 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 
 ---
 
-# 🔐 Security Features
+# 🎯 Roadmap
 
-- Protected Authentication
-- Anonymous User Mapping
-- Firestore Security Rules
-- Input Sanitization
-- Rate Limiting
-- Abuse Detection
-- Spam Prevention
+- [x] Authentication
+- [x] Anonymous Posting
+- [x] Real-Time Feed
+- [x] User Profiles
 
----
+### Upcoming
 
-# 🎯 Future Roadmap
-
-- [ ] Anonymous Voice Messages
 - [ ] AI Moderation
-- [ ] Community Channels
-- [ ] Dark Mode Enhancements
 - [ ] Anonymous Polls
-- [ ] College Verification
-- [ ] Achievement System
-- [ ] Mobile Application
+- [ ] Voice Rooms
+- [ ] Community Channels
+- [ ] Mobile App
 
 ---
 
-# 📊 Project Goals
-
-- Promote healthy anonymous communication
-- Help juniors interact with seniors
-- Encourage open discussions
-- Build a safer college community
-
----
-
-# 🤝 Contributing
-
-Contributions are welcome!
+# 🌎 Open Source Contribution
 
 ```bash
 Fork 🍴
 Clone 📥
-Create Branch 🌱
-Commit Changes 🚀
-Open Pull Request 🔥
+Build 🚀
+Commit 🔥
+Pull Request ⭐
 ```
 
 ---
 
-# 👨‍💻 Author
+# 👨‍💻 Developer
+
+<div align="center">
+
+<img src="https://github-profile-trophy.vercel.app/?username=Akash22-11&theme=tokyonight&row=1&column=7"/>
 
 ### Akash
 
-Passionate Developer • Open Source Enthusiast • Engineering Student
+Engineering Student • Data Science Enthusiast • Builder
 
-<p align="left">
-  <a href="YOUR_LINKEDIN">LinkedIn</a> •
-  <a href="YOUR_GITHUB">GitHub</a>
-</p>
+</div>
 
 ---
 
 <div align="center">
 
-### ⭐ If you like this project, don't forget to star the repository!
+## ⭐ Star This Repository
 
-**Built with ❤️ for the student community**
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=700&size=25&pause=1000&color=7C3AED&center=true&vCenter=true&width=700&lines=Thanks+for+visiting!;Don't+forget+to+leave+a+⭐;Happy+Coding+🚀" />
 
 </div>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7C3AED&height=120&section=footer"/>
