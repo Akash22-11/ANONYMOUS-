@@ -1,0 +1,742 @@
+// =============================================================
+// Prisma Schema — Anonymous College Mentorship Platform
+// Database: PostgreSQL 16
+// ORM: Prisma v5
+// =============================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================
+// ENUMS
+// =============================================================
+
+enum Role {
+  STUDENT
+  MENTOR
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Year {
+  FIRST
+  SECOND
+  THIRD
+  FOURTH
+  FIFTH
+  ALUMNI
+}
+
+enum PostStatus {
+  ACTIVE
+  ARCHIVED
+  REMOVED
+  PENDING_REVIEW
+}
+
+enum ResourceType {
+  PDF
+  NOTE
+  RESUME_TEMPLATE
+  ROADMAP
+  CHEATSHEET
+  LINK
+  VIDEO
+  OTHER
+}
+
+enum MentorRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+  COMPLETED
+}
+
+enum SessionStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum NotificationType {
+  MENTION
+  REPLY
+  UPVOTE
+  COMMENT
+  MENTOR_REQUEST
+  MENTOR_ACCEPTED
+  MENTOR_DECLINED
+  SESSION_REMINDER
+  SESSION_STARTED
+  NEW_FOLLOWER
+  RESOURCE_SHARED
+  REPORT_RESOLVED
+  SYSTEM
+  BADGE_EARNED
+}
+
+enum ReportReason {
+  SPAM
+  HARASSMENT
+  OFFENSIVE_CONTENT
+  MISINFORMATION
+  PLAGIARISM
+  INAPPROPRIATE
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  UNDER_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+enum BadgeType {
+  HELPFUL_MENTOR
+  TOP_CONTRIBUTOR
+  RESOURCE_SHARER
+  PROBLEM_SOLVER
+  COMMUNITY_BUILDER
+  FIRST_ANSWER
+  STREAK_7
+  STREAK_30
+  VETERAN
+}
+
+// =============================================================
+// MODEL: User — Core identity, auth, and roles
+// =============================================================
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  passwordHash    String    @map("password_hash")
+  username        String    @unique
+  anonymousAlias  String    @unique @map("anonymous_alias")
+  role            Role      @default(STUDENT)
+  isEmailVerified Boolean   @default(false) @map("is_email_verified")
+  isActive        Boolean   @default(true) @map("is_active")
+  isBanned        Boolean   @default(false) @map("is_banned")
+  banReason       String?   @map("ban_reason")
+  bannedAt        DateTime? @map("banned_at")
+  bannedBy        String?   @map("banned_by")
+  lastLoginAt     DateTime? @map("last_login_at")
+  lastSeenAt      DateTime? @map("last_seen_at")
+  refreshToken    String?   @map("refresh_token")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  // Relations
+  profile           Profile?
+  posts             Post[]
+  comments          Comment[]
+  votes             Vote[]
+  resources         Resource[]
+  notifications     Notification[]    @relation("NotificationRecipient")
+  sentNotifications Notification[]    @relation("NotificationSender")
+  reports           Report[]          @relation("ReportedBy")
+  reportedContent   Report[]          @relation("ReportTarget")
+  mentorProfile     MentorProfile?
+  mentorRequests    MentorRequest[]   @relation("RequestedBy")
+  menteeSessions    MentorSession[]   @relation("MenteeSession")
+  mentorSessions    MentorSession[]   @relation("MentorSession")
+  chatParticipants  ChatParticipant[]
+  sentMessages      Message[]
+  otpCodes          OTPVerification[]
+  badges            UserBadge[]
+  followers         Follow[]          @relation("Following")
+  following         Follow[]          @relation("Follower")
+  adminActions      AdminAction[]
+
+  @@index([email])
+  @@index([username])
+  @@index([anonymousAlias])
+  @@index([role])
+  @@index([isActive, isBanned])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+// =============================================================
+// MODEL: Profile — Extended academic/personal info
+// =============================================================
+
+model Profile {
+  id               String   @id @default(uuid())
+  userId           String   @unique @map("user_id")
+  displayName      String?  @map("display_name")
+  bio              String?  @db.Text
+  avatarUrl        String?  @map("avatar_url")
+  avatarPublicId   String?  @map("avatar_public_id")
+  college          String?
+  department       String?
+  year             Year?
+  skills           String[] @default([])
+  linkedinUrl      String?  @map("linkedin_url")
+  githubUrl        String?  @map("github_url")
+  portfolioUrl     String?  @map("portfolio_url")
+  reputationPoints Int      @default(0) @map("reputation_points")
+  postCount        Int      @default(0) @map("post_count")
+  answerCount      Int      @default(0) @map("answer_count")
+  helperScore      Float    @default(0.0) @map("helper_score")
+  isProfilePublic  Boolean  @default(true) @map("is_profile_public")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([college, department])
+  @@index([reputationPoints])
+  @@map("profiles")
+}
+
+// =============================================================
+// MODEL: MentorProfile — Mentor-specific details
+// =============================================================
+
+model MentorProfile {
+  id                  String   @id @default(uuid())
+  userId              String   @unique @map("user_id")
+  headline            String?
+  expertise           String[] @default([])
+  currentCompany      String?  @map("current_company")
+  yearsOfExperience   Int?     @map("years_of_experience")
+  placementYear       Int?     @map("placement_year")
+  isAvailable         Boolean  @default(true) @map("is_available")
+  maxWeeklySessions   Int      @default(3) @map("max_weekly_sessions")
+  preferredSessionLen Int      @default(30) @map("preferred_session_len")
+  sessionTopics       String[] @default([]) @map("session_topics")
+  totalSessions       Int      @default(0) @map("total_sessions")
+  avgRating           Float    @default(0.0) @map("avg_rating")
+  totalRatings        Int      @default(0) @map("total_ratings")
+  verifiedMentor      Boolean  @default(false) @map("verified_mentor")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentorRequests MentorRequest[]
+  availability   MentorAvailability[]
+
+  @@index([userId])
+  @@index([isAvailable])
+  @@index([avgRating])
+  @@map("mentor_profiles")
+}
+
+// =============================================================
+// MODEL: MentorAvailability — Recurring weekly time slots
+// =============================================================
+
+model MentorAvailability {
+  id              String   @id @default(uuid())
+  mentorProfileId String   @map("mentor_profile_id")
+  dayOfWeek       Int
+  startTime       String   @map("start_time")
+  endTime         String   @map("end_time")
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  mentorProfile MentorProfile @relation(fields: [mentorProfileId], references: [id], onDelete: Cascade)
+
+  @@index([mentorProfileId])
+  @@index([dayOfWeek, isActive])
+  @@map("mentor_availability")
+}
+
+// =============================================================
+// MODEL: MentorRequest — Session booking flow
+// =============================================================
+
+model MentorRequest {
+  id              String              @id @default(uuid())
+  requesterId     String              @map("requester_id")
+  mentorProfileId String              @map("mentor_profile_id")
+  topic           String
+  description     String              @db.Text
+  status          MentorRequestStatus @default(PENDING)
+  scheduledAt     DateTime?           @map("scheduled_at")
+  declineReason   String?             @map("decline_reason")
+  isAnonymous     Boolean             @default(false) @map("is_anonymous")
+  chatRoomId      String?             @unique @map("chat_room_id")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  requester     User           @relation("RequestedBy", fields: [requesterId], references: [id], onDelete: Cascade)
+  mentorProfile MentorProfile  @relation(fields: [mentorProfileId], references: [id], onDelete: Cascade)
+  session       MentorSession?
+  chatRoom      Chat?          @relation(fields: [chatRoomId], references: [id])
+
+  @@index([requesterId])
+  @@index([mentorProfileId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("mentor_requests")
+}
+
+// =============================================================
+// MODEL: MentorSession — Completed/active sessions
+// =============================================================
+
+model MentorSession {
+  id              String        @id @default(uuid())
+  requestId       String        @unique @map("request_id")
+  menteeId        String        @map("mentee_id")
+  mentorUserId    String        @map("mentor_user_id")
+  status          SessionStatus @default(SCHEDULED)
+  startedAt       DateTime?     @map("started_at")
+  endedAt         DateTime?     @map("ended_at")
+  durationMinutes Int?          @map("duration_minutes")
+  notes           String?       @db.Text
+  feedbackRating  Int?          @map("feedback_rating")
+  feedbackText    String?       @db.Text @map("feedback_text")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  request MentorRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  mentee  User          @relation("MenteeSession", fields: [menteeId], references: [id])
+  mentor  User          @relation("MentorSession", fields: [mentorUserId], references: [id])
+
+  @@index([menteeId])
+  @@index([mentorUserId])
+  @@index([status])
+  @@map("mentor_sessions")
+}
+
+// =============================================================
+// MODEL: Tag — Reusable topic labels
+// =============================================================
+
+model Tag {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?
+  usageCount  Int      @default(0) @map("usage_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  posts     PostTag[]
+  resources ResourceTag[]
+
+  @@index([slug])
+  @@index([usageCount])
+  @@map("tags")
+}
+
+// =============================================================
+// MODEL: Post — Community questions and discussions
+// =============================================================
+
+model Post {
+  id              String     @id @default(uuid())
+  authorId        String     @map("author_id")
+  title           String
+  body            String     @db.Text
+  isAnonymous     Boolean    @default(false) @map("is_anonymous")
+  status          PostStatus @default(ACTIVE)
+  isPinned        Boolean    @default(false) @map("is_pinned")
+  isSolved        Boolean    @default(false) @map("is_solved")
+  solvedCommentId String?    @map("solved_comment_id")
+  viewCount       Int        @default(0) @map("view_count")
+  upvoteCount     Int        @default(0) @map("upvote_count")
+  downvoteCount   Int        @default(0) @map("downvote_count")
+  commentCount    Int        @default(0) @map("comment_count")
+  trendingScore   Float      @default(0.0) @map("trending_score")
+  slug            String     @unique
+  imageUrls       String[]   @default([]) @map("image_urls")
+  editedAt        DateTime?  @map("edited_at")
+  deletedAt       DateTime?  @map("deleted_at")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags     PostTag[]
+  comments Comment[]
+  votes    Vote[]    @relation("PostVotes")
+  reports  Report[]  @relation("ReportedPost")
+
+  @@index([authorId])
+  @@index([status])
+  @@index([isAnonymous])
+  @@index([trendingScore])
+  @@index([createdAt])
+  @@index([upvoteCount])
+  @@index([slug])
+  @@index([deletedAt])
+  @@map("posts")
+}
+
+// =============================================================
+// MODEL: PostTag — M:N Post <-> Tag
+// =============================================================
+
+model PostTag {
+  postId    String   @map("post_id")
+  tagId     String   @map("tag_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([tagId])
+  @@map("post_tags")
+}
+
+// =============================================================
+// MODEL: Comment — Threaded replies
+// =============================================================
+
+model Comment {
+  id            String    @id @default(uuid())
+  postId        String    @map("post_id")
+  authorId      String    @map("author_id")
+  parentId      String?   @map("parent_id")
+  body          String    @db.Text
+  isAnonymous   Boolean   @default(false) @map("is_anonymous")
+  isBestAnswer  Boolean   @default(false) @map("is_best_answer")
+  upvoteCount   Int       @default(0) @map("upvote_count")
+  downvoteCount Int       @default(0) @map("downvote_count")
+  depth         Int       @default(0)
+  isEdited      Boolean   @default(false) @map("is_edited")
+  editedAt      DateTime? @map("edited_at")
+  deletedAt     DateTime? @map("deleted_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  post    Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author  User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: SetNull)
+  replies Comment[] @relation("CommentReplies")
+  votes   Vote[]    @relation("CommentVotes")
+  reports Report[]  @relation("ReportedComment")
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
+  @@index([isBestAnswer])
+  @@index([deletedAt])
+  @@map("comments")
+}
+
+// =============================================================
+// MODEL: Vote — Upvotes/downvotes on posts & comments
+// =============================================================
+
+model Vote {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  postId    String?  @map("post_id")
+  commentId String?  @map("comment_id")
+  voteType  VoteType @map("vote_type")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post?    @relation("PostVotes", fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation("CommentVotes", fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+  @@index([postId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("votes")
+}
+
+// =============================================================
+// MODEL: Resource — Uploaded files, notes, links
+// =============================================================
+
+model Resource {
+  id            String       @id @default(uuid())
+  uploaderId    String       @map("uploader_id")
+  title         String
+  description   String?      @db.Text
+  type          ResourceType
+  fileUrl       String?      @map("file_url")
+  filePublicId  String?      @map("file_public_id")
+  fileSize      Int?         @map("file_size")
+  mimeType      String?      @map("mime_type")
+  externalUrl   String?      @map("external_url")
+  isAnonymous   Boolean      @default(false) @map("is_anonymous")
+  isApproved    Boolean      @default(false) @map("is_approved")
+  downloadCount Int          @default(0) @map("download_count")
+  viewCount     Int          @default(0) @map("view_count")
+  college       String?
+  department    String?
+  year          Year?
+  deletedAt     DateTime?    @map("deleted_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  uploader User          @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+  tags     ResourceTag[]
+  reports  Report[]      @relation("ReportedResource")
+
+  @@index([uploaderId])
+  @@index([type])
+  @@index([isApproved])
+  @@index([college, department])
+  @@index([downloadCount])
+  @@index([deletedAt])
+  @@map("resources")
+}
+
+// =============================================================
+// MODEL: ResourceTag — M:N Resource <-> Tag
+// =============================================================
+
+model ResourceTag {
+  resourceId String   @map("resource_id")
+  tagId      String   @map("tag_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([resourceId, tagId])
+  @@index([tagId])
+  @@map("resource_tags")
+}
+
+// =============================================================
+// MODEL: Notification — In-app notification delivery
+// =============================================================
+
+model Notification {
+  id          String           @id @default(uuid())
+  recipientId String           @map("recipient_id")
+  senderId    String?          @map("sender_id")
+  type        NotificationType
+  title       String
+  body        String
+  isRead      Boolean          @default(false) @map("is_read")
+  readAt      DateTime?        @map("read_at")
+  entityType  String?          @map("entity_type")
+  entityId    String?          @map("entity_id")
+  metadata    Json?
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  recipient User  @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  sender    User? @relation("NotificationSender", fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@index([recipientId, isRead])
+  @@index([recipientId, createdAt])
+  @@index([senderId])
+  @@map("notifications")
+}
+
+// =============================================================
+// MODEL: Report — Content moderation queue
+// =============================================================
+
+model Report {
+  id           String       @id @default(uuid())
+  reporterId   String       @map("reporter_id")
+  reason       ReportReason
+  description  String?      @db.Text
+  status       ReportStatus @default(PENDING)
+  resolvedBy   String?      @map("resolved_by")
+  resolvedAt   DateTime?    @map("resolved_at")
+  resolution   String?      @db.Text
+  targetUserId String?      @map("target_user_id")
+  postId       String?      @map("post_id")
+  commentId    String?      @map("comment_id")
+  resourceId   String?      @map("resource_id")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  reporter     User      @relation("ReportedBy", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetUser   User?     @relation("ReportTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+  post         Post?     @relation("ReportedPost", fields: [postId], references: [id], onDelete: SetNull)
+  comment      Comment?  @relation("ReportedComment", fields: [commentId], references: [id], onDelete: SetNull)
+  resource     Resource? @relation("ReportedResource", fields: [resourceId], references: [id], onDelete: SetNull)
+
+  @@index([reporterId])
+  @@index([status])
+  @@index([postId])
+  @@index([commentId])
+  @@index([targetUserId])
+  @@map("reports")
+}
+
+// =============================================================
+// MODEL: Chat — Conversation rooms
+// =============================================================
+
+model Chat {
+  id        String   @id @default(uuid())
+  name      String?
+  isGroup   Boolean  @default(false) @map("is_group")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  participants  ChatParticipant[]
+  messages      Message[]
+  mentorRequest MentorRequest?
+
+  @@index([createdAt])
+  @@map("chats")
+}
+
+// =============================================================
+// MODEL: ChatParticipant — Users in a chat room
+// =============================================================
+
+model ChatParticipant {
+  id         String    @id @default(uuid())
+  chatId     String    @map("chat_id")
+  userId     String    @map("user_id")
+  isAdmin    Boolean   @default(false) @map("is_admin")
+  lastReadAt DateTime? @map("last_read_at")
+  joinedAt   DateTime  @default(now()) @map("joined_at")
+  leftAt     DateTime? @map("left_at")
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, userId])
+  @@index([chatId])
+  @@index([userId])
+  @@map("chat_participants")
+}
+
+// =============================================================
+// MODEL: Message — Chat messages
+// =============================================================
+
+model Message {
+  id         String        @id @default(uuid())
+  chatId     String        @map("chat_id")
+  senderId   String        @map("sender_id")
+  body       String?       @db.Text
+  mediaUrl   String?       @map("media_url")
+  mediaType  String?       @map("media_type")
+  replyToId  String?       @map("reply_to_id")
+  status     MessageStatus @default(SENT)
+  isEdited   Boolean       @default(false) @map("is_edited")
+  editedAt   DateTime?     @map("edited_at")
+  isDeleted  Boolean       @default(false) @map("is_deleted")
+  deletedAt  DateTime?     @map("deleted_at")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  chat    Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  sender  User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  replyTo Message? @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies Message[] @relation("MessageReplies")
+
+  @@index([chatId, createdAt])
+  @@index([senderId])
+  @@index([status])
+  @@map("messages")
+}
+
+// =============================================================
+// MODEL: OTPVerification — Email OTP codes
+// =============================================================
+
+model OTPVerification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  email     String
+  code      String
+  purpose   String
+  isUsed    Boolean  @default(false) @map("is_used")
+  attempts  Int      @default(0)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+  @@index([email, purpose])
+  @@index([expiresAt])
+  @@map("otp_verifications")
+}
+
+// =============================================================
+// MODEL: UserBadge — Earned achievement badges
+// =============================================================
+
+model UserBadge {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  badge     BadgeType
+  awardedAt DateTime  @default(now()) @map("awarded_at")
+  metadata  Json?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badge])
+  @@index([userId])
+  @@index([badge])
+  @@map("user_badges")
+}
+
+// =============================================================
+// MODEL: Follow — Social follow graph
+// =============================================================
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String   @map("follower_id")
+  followingId String   @map("following_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  follower  User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+// =============================================================
+// MODEL: AdminAction — Full audit trail for admin operations
+// =============================================================
+
+model AdminAction {
+  id         String   @id @default(uuid())
+  adminId    String   @map("admin_id")
+  actionType String   @map("action_type")
+  targetType String   @map("target_type")
+  targetId   String   @map("target_id")
+  reason     String?  @db.Text
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  admin User @relation(fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([actionType])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+  @@map("admin_actions")
+}
