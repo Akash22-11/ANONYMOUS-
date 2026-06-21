@@ -1,12 +1,4 @@
 #!/bin/sh
-# scripts/wait-for-it.sh
-# Minimal TCP-wait helper — waits for a host:port to accept connections
-# before running the given command.
-#
-# Usage: ./wait-for-it.sh host:port [-t timeout] -- command args...
-#
-# Example (docker-compose entrypoint override):
-#   ./scripts/wait-for-it.sh postgres:5432 -t 60 -- npx prisma migrate deploy
 
 set -e
 
@@ -21,7 +13,7 @@ while [ "$1" != "--" ] && [ -n "$1" ]; do
     *)  shift ;;
   esac
 done
-shift || true # consume --
+shift || true                                                                      # consume 
 
 HOST="${HOSTPORT%%:*}"
 PORT="${HOSTPORT##*:}"
