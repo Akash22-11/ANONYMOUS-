@@ -15,6 +15,7 @@ const prisma =
     ],
   });
 
+
 // Log slow queries in development
 if (process.env.NODE_ENV === 'development') {
   prisma.$on('query', (e) => {
@@ -33,9 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 
-/**
- * Connect to the database with retry logic
- */
+
 async function connectDB() {
   const maxRetries = 5;
   let attempt = 0;
@@ -49,14 +48,12 @@ async function connectDB() {
       attempt++;
       logger.error(`DB connection attempt ${attempt}/${maxRetries} failed: ${err.message}`);
       if (attempt === maxRetries) throw err;
-      await new Promise((r) => setTimeout(r, 2000 * attempt)); // exponential back-off
+      await new Promise((r) => setTimeout(r, 2000 * attempt));                           // exponential back-off
     }
   }
 }
-
-/**
- * Graceful disconnect
- */
+ 
+ 
 async function disconnectDB() {
   await prisma.$disconnect();
   logger.info('PostgreSQL disconnected');
