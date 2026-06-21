@@ -1,9 +1,8 @@
 version: '3.9'
 
 services:
-  # ──────────────────────────────────────────────────
+
   # PostgreSQL — Primary Database
-  # ──────────────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
     container_name: mentorship_postgres
@@ -26,9 +25,8 @@ services:
       retries: 5
       start_period: 30s
 
-  # ──────────────────────────────────────────────────
+
   # Redis — Caching, Rate Limiting, Sessions
-  # ──────────────────────────────────────────────────
   redis:
     image: redis:7.2-alpine
     container_name: mentorship_redis
@@ -54,9 +52,7 @@ services:
       retries: 5
       start_period: 10s
 
-  # ──────────────────────────────────────────────────
   # Redis Commander — Dev UI (run: docker compose --profile dev up)
-  # ──────────────────────────────────────────────────
   redis-commander:
     image: rediscommander/redis-commander:latest
     container_name: mentorship_redis_ui
@@ -74,9 +70,8 @@ services:
     networks:
       - mentorship_network
 
-  # ──────────────────────────────────────────────────
+ 
   # pgAdmin — Dev UI (run: docker compose --profile dev up)
-  # ──────────────────────────────────────────────────
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: mentorship_pgadmin
@@ -96,9 +91,7 @@ services:
     networks:
       - mentorship_network
 
-  # ──────────────────────────────────────────────────
-  # Backend App (run: docker compose --profile production up)
-  # ──────────────────────────────────────────────────
+  # Backend App 
   app:
     build:
       context: .
