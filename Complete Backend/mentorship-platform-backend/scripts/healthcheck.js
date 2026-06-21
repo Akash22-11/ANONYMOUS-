@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-// scripts/healthcheck.js
-// Standalone health check — used by Docker HEALTHCHECK as a fallback to curl,
-// and useful for local smoke testing: `node scripts/healthcheck.js`
 
 const http = require('http');
 
