@@ -21,7 +21,7 @@ while [ -n "$1" ] && [ "$1" != "--" ]; do
     *) shift ;;
   esac
 done
-shift || true
+[ $# -eq 0 ] || shift
 
 case "$TIMEOUT" in
   ''|*[!0-9]*) echo "Invalid timeout: $TIMEOUT" >&2; exit 1 ;;
