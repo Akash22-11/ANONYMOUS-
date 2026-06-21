@@ -3,7 +3,8 @@
 const Redis = require('ioredis');
 const { logger } = require('../utils/logger');
 
-// ─── ioredis client (local Docker Redis) ─────────────────────
+
+// ─── ioredis client (local Docker Redis)
 let redisClient = null;
 
 function getRedisClient() {
@@ -16,7 +17,7 @@ function getRedisClient() {
     retryStrategy(times) {
       if (times > 10) {
         logger.error('Redis: max retries reached');
-        return null; // stop retrying
+        return null;                                      // stop retrying
       }
       return Math.min(times * 200, 2000);
     },
@@ -37,7 +38,7 @@ function getRedisClient() {
   return redisClient;
 }
 
-// ─── Upstash REST client (used by @upstash/ratelimit) ────────
+// ─── Upstash REST client 
 let upstashClient = null;
 
 function getUpstashClient() {
@@ -58,7 +59,7 @@ function getUpstashClient() {
   return upstashClient;
 }
 
-// ─── Key helpers ─────────────────────────────────────────────
+// ─── Key helpers 
 const RedisKeys = Object.freeze({
   refreshToken:      (userId) => `rt:${userId}`,
   otpCode:           (userId, purpose) => `otp:${userId}:${purpose}`,
@@ -74,7 +75,7 @@ const RedisKeys = Object.freeze({
   notifUnread:       (userId) => `notif:unread:${userId}`,
 });
 
-// ─── TTLs (seconds) ──────────────────────────────────────────
+──────────────────────────────────────────
 const TTL = Object.freeze({
   ACCESS_TOKEN:    15 * 60,           // 15 min
   REFRESH_TOKEN:   7 * 24 * 60 * 60, // 7 days
