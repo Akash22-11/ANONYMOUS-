@@ -10,6 +10,7 @@ cloudinary.config({
   secure:     true,
 });
 
+
 // Verify config on startup
 async function verifyCloudinaryConfig() {
   try {
@@ -17,11 +18,13 @@ async function verifyCloudinaryConfig() {
     logger.info('Cloudinary connected');
   } catch (err) {
     logger.error(`Cloudinary config error: ${err.message}`);
+  
     // Non-fatal — uploads will fail gracefully at request time
   }
 }
 
-// ─── Upload preset constants ──────────────────────────────────
+
+// ─── Upload preset constants 
 const CLOUDINARY_FOLDERS = Object.freeze({
   AVATARS:    'mentorship/avatars',
   POST_IMAGES: 'mentorship/posts',
