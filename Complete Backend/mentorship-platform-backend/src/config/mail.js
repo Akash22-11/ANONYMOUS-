@@ -33,7 +33,7 @@ async function verifyMailConfig() {
   }
 }
 
-// ─── Generic send helper ─────────────────────────────────────
+// ─── Generic send helper 
 async function sendMail({ to, subject, html, text }) {
   const transport = getMailTransporter();
   const info = await transport.sendMail({
@@ -44,7 +44,8 @@ async function sendMail({ to, subject, html, text }) {
   return info;
 }
 
-// ─── Email templates ─────────────────────────────────────────
+
+// ─── Email templates
 function buildEmailTemplate(title, bodyHtml) {
   return `
   <!DOCTYPE html>
