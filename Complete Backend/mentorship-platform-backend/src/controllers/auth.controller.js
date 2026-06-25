@@ -75,6 +75,7 @@ async function register(req, res) {
 async function login(req, res) {
   const { user, accessToken, refreshToken } = await authService.login(req.body);
 
+
   
   // Set refresh token as httpOnly cookie
   res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
@@ -95,6 +96,7 @@ async function login(req, res) {
   });
 }
 
+
 /**
  * @swagger
  * /auth/logout:
@@ -102,12 +104,13 @@ async function login(req, res) {
  *     summary: Logout — revoke refresh token
  *     tags: [Auth]
  */
+
 async function logout(req, res) {
   await authService.logout(req.user.id);
 
+  
   // Clear the cookie
   res.clearCookie('refreshToken', { path: '/api/v1/auth/refresh' });
-
   return successResponse(res, { message: 'Logged out successfully' });
 }
 
