@@ -65,6 +65,7 @@ RUN mkdir -p /app/logs /app/uploads && chown -R nodeapp:nodejs /app/logs /app/up
 
 USER nodeapp
 
+
 EXPOSE 5000
 
 # Health check hits the /health endpoint defined in app.js
