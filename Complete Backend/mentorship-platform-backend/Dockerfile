@@ -24,7 +24,6 @@ COPY . .
 # Generate Prisma client against the schema
 RUN npx prisma generate
 
-# ──────────────────────────────────────────────────────────────
 # Stage 3: Production dependencies only (smaller node_modules)
 # ──────────────────────────────────────────────────────────────
 FROM node:20-alpine AS prod-deps
