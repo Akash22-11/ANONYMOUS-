@@ -38,7 +38,6 @@ RUN npm ci --omit=dev
 COPY prisma ./prisma
 RUN npx prisma generate
 
-# ──────────────────────────────────────────────────────────────
 # Stage 4: Runtime — minimal final image
 # ──────────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
