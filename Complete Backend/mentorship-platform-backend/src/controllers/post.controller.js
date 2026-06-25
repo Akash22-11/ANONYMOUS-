@@ -8,6 +8,7 @@ const { HTTP }     = require('../constants/statusCodes');
 const { uploadPostImage } = require('../utils/cloudinaryUpload');
 const { autoReportFlagged } = require('../middleware/toxicity');
 
+
 /**
  * @swagger
  * /posts:
@@ -15,6 +16,7 @@ const { autoReportFlagged } = require('../middleware/toxicity');
  *     summary: List posts with filtering and sorting
  *     tags: [Posts]
  */
+
 async function getPosts(req, res) {
   const { page, limit } = parsePaginationParams(req.query);
   const { search, tag, sort, author, solved, anonymous } = req.query;
@@ -27,6 +29,7 @@ async function getPosts(req, res) {
 
   return paginatedResponse(res, { message: 'Posts fetched', data: posts, pagination });
 }
+
 
 /**
  * @swagger
