@@ -60,11 +60,13 @@ async function getPostById(req, res) {
     req.user?.role ?? null,
   );
 
+  
   // Async view count increment — never blocks response
   postService.incrementViewCount(post.id).catch(() => {});
 
   return successResponse(res, { message: 'Post fetched', data: post });
 }
+
 
 /**
  * @swagger
