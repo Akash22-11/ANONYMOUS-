@@ -9,7 +9,9 @@ const {
 const { HTTP } = require('../constants/statusCodes');
 const { logger } = require('../utils/logger');
 
+
 // Shared cookie options for refresh token
+
 const REFRESH_COOKIE_OPTIONS = {
   httpOnly: true,
   secure:   process.env.NODE_ENV === 'production',
