@@ -46,6 +46,8 @@ const REFRESH_COOKIE_OPTIONS = {
  *       409: { description: Email already registered }
  *       422: { description: Validation error }
  */
+
+
 async function register(req, res) {
   const user = await authService.register(req.body);
   return createdResponse(res, {
