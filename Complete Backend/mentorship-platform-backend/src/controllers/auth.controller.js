@@ -71,9 +71,11 @@ async function register(req, res) {
  *     tags: [Auth]
  *     security: []
  */
+
 async function login(req, res) {
   const { user, accessToken, refreshToken } = await authService.login(req.body);
 
+  
   // Set refresh token as httpOnly cookie
   res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
 
