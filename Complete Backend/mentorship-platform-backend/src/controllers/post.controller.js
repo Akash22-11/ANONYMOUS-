@@ -38,6 +38,7 @@ async function getPosts(req, res) {
  *     summary: Get the most used tags (for sidebar/explore)
  *     tags: [Posts]
  */
+
 async function getTrendingTags(req, res) {
   const limit = Math.min(parseInt(req.query.limit ?? '15', 10), 30);
   const tags  = await postService.getTrendingTags(limit);
@@ -51,6 +52,7 @@ async function getTrendingTags(req, res) {
  *     summary: Get a single post by ID
  *     tags: [Posts]
  */
+
 async function getPostById(req, res) {
   const post = await postService.getPostById(
     req.params.id,
