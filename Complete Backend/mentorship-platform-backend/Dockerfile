@@ -39,7 +39,6 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 # Stage 4: Runtime — minimal final image
-# ──────────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
 
 RUN apk add --no-cache openssl libc6-compat curl tini netcat-openbsd
