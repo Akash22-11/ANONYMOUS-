@@ -1,11 +1,6 @@
-# =============================================================
-# Dockerfile — Anonymous College Mentorship Platform Backend
-# Multi-stage build: deps -> build -> production runtime
-# =============================================================
 
-# ──────────────────────────────────────────────────────────────
 # Stage 1: Dependencies — install all deps (incl. dev) for build
-# ──────────────────────────────────────────────────────────────
+
 FROM node:20-alpine AS deps
 
 # OpenSSL is required by Prisma's query engine on Alpine
