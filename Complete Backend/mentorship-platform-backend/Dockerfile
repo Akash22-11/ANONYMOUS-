@@ -11,7 +11,6 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci --include=dev
 
-# ──────────────────────────────────────────────────────────────
 # Stage 2: Build — generate Prisma client
 # ──────────────────────────────────────────────────────────────
 FROM node:20-alpine AS build
