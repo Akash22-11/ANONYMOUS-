@@ -49,13 +49,6 @@ async function changeUserRole(req, res) {
 
 // ─── Post moderation ──────────────────────────────────────────
 
-/**
- * @swagger
- * /admin/posts/{id}/status:
- *   patch:
- *     summary: Change a post's status (archive, remove, restore)
- *     tags: [Admin]
- */
 async function updatePostStatus(req, res) {
   const post = await adminService.updatePostStatus(req.user.id, req.params.id, req.body);
   return successResponse(res, { message: 'Post status updated', data: post });
