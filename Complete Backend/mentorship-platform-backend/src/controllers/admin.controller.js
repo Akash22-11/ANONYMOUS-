@@ -13,15 +13,6 @@ async function getAnalytics(req, res) {
   return successResponse(res, { message: 'Analytics fetched', data });
 }
 
-// ─── User management ─────────────────────────────────────────
-
-/**
- * @swagger
- * /admin/users:
- *   get:
- *     summary: Paginated user list with filters
- *     tags: [Admin]
- */
 async function getUsers(req, res) {
   const { page, limit } = parsePaginationParams(req.query);
   const { role, banned, search, sortBy } = req.query;
