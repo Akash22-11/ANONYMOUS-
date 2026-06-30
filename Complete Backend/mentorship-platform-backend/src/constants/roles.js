@@ -5,7 +5,7 @@ const ROLES = Object.freeze({
   SUPER_ADMIN: 'SUPER_ADMIN',
 });
 
-// Hierarchy level — higher = more permissions
+
 const ROLE_LEVEL = Object.freeze({
   STUDENT:     1,
   MENTOR:      2,
