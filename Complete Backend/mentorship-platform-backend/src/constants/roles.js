@@ -1,4 +1,4 @@
-// src/constants/roles.js
+
 
 const ROLES = Object.freeze({
   STUDENT:     'STUDENT',
