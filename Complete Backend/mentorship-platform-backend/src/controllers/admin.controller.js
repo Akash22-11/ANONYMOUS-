@@ -6,15 +6,6 @@ const {
 const { parsePaginationParams } = require('../utils/pagination');
 const { z } = require('zod');
 
-// ─── Dashboard ────────────────────────────────────────────────
-
-/**
- * @swagger
- * /admin/analytics:
- *   get:
- *     summary: Platform analytics dashboard
- *     tags: [Admin]
- */
 async function getAnalytics(req, res) {
   const period = ['7d', '30d', '90d', 'all'].includes(req.query.period)
     ? req.query.period : '30d';
