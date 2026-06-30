@@ -61,13 +61,6 @@ async function deletePost(req, res) {
 
 // ─── Resource moderation ──────────────────────────────────────
 
-/**
- * @swagger
- * /admin/resources/pending:
- *   get:
- *     summary: Resources awaiting approval (FIFO queue)
- *     tags: [Admin]
- */
 async function getPendingResources(req, res) {
   const { page, limit } = parsePaginationParams(req.query);
   const { resources, pagination } = await adminService.getPendingResources({ page, limit });
