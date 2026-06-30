@@ -15,7 +15,7 @@ const ROLE_LEVEL = Object.freeze({
   SUPER_ADMIN: 4,
 });
 
-// Which roles can access admin routes
+
 const ADMIN_ROLES = [ROLES.ADMIN, ROLES.SUPER_ADMIN];
 
 // Which roles can act as mentors
