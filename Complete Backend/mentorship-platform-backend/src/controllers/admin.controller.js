@@ -42,13 +42,6 @@ async function unbanUser(req, res) {
   return successResponse(res, { message: 'User unbanned', data: user });
 }
 
-/**
- * @swagger
- * /admin/users/{id}/role:
- *   patch:
- *     summary: Change a user's role
- *     tags: [Admin]
- */
 async function changeUserRole(req, res) {
   const user = await adminService.changeUserRole(req.user.id, req.params.id, req.body);
   return successResponse(res, { message: 'User role updated', data: user });
