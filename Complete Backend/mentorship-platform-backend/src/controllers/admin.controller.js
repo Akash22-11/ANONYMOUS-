@@ -37,13 +37,6 @@ async function banUser(req, res) {
   return successResponse(res, { message: 'User banned', data: user });
 }
 
-/**
- * @swagger
- * /admin/users/{id}/unban:
- *   post:
- *     summary: Unban a user
- *     tags: [Admin]
- */
 async function unbanUser(req, res) {
   const user = await adminService.unbanUser(req.user.id, req.params.id);
   return successResponse(res, { message: 'User unbanned', data: user });
