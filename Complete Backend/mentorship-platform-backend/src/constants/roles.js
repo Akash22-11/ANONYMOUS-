@@ -21,9 +21,6 @@ const ADMIN_ROLES = [ROLES.ADMIN, ROLES.SUPER_ADMIN];
 // Which roles can act as mentors
 const MENTOR_ROLES = [ROLES.MENTOR, ROLES.ADMIN, ROLES.SUPER_ADMIN];
 
-/**
- * Returns true if `role` has at least the level of `requiredRole`
- */
 function hasMinimumRole(role, requiredRole) {
   return (ROLE_LEVEL[role] ?? 0) >= (ROLE_LEVEL[requiredRole] ?? 0);
 }
