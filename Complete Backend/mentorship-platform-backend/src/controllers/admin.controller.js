@@ -26,13 +26,7 @@ async function getUsers(req, res) {
   return paginatedResponse(res, { message: 'Users fetched', data: users, pagination });
 }
 
-/**
- * @swagger
- * /admin/users/{id}:
- *   get:
- *     summary: Full user detail for admin inspection
- *     tags: [Admin]
- */
+
 async function getUserDetail(req, res) {
   const user = await adminService.getUserDetail(req.params.id);
   return successResponse(res, { message: 'User detail fetched', data: user });
