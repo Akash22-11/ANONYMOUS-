@@ -32,13 +32,6 @@ async function getUserDetail(req, res) {
   return successResponse(res, { message: 'User detail fetched', data: user });
 }
 
-/**
- * @swagger
- * /admin/users/{id}/ban:
- *   post:
- *     summary: Ban a user
- *     tags: [Admin]
- */
 async function banUser(req, res) {
   const user = await adminService.banUser(req.user.id, req.params.id, req.body);
   return successResponse(res, { message: 'User banned', data: user });
