@@ -16,7 +16,9 @@ const TAGS = Object.freeze({
   OPEN_SOURCE:   'open-source',
 });
 
+
 const MAX_TAGS_PER_POST     = 5;
 const MAX_TAGS_PER_RESOURCE = 5;
+
 
 module.exports = { TAGS, MAX_TAGS_PER_POST, MAX_TAGS_PER_RESOURCE };
