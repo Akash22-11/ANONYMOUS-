@@ -1,5 +1,3 @@
-
-
 const ROLES = Object.freeze({
   STUDENT:     'STUDENT',
   MENTOR:      'MENTOR',
