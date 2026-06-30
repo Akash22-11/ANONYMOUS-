@@ -54,13 +54,6 @@ async function updatePostStatus(req, res) {
   return successResponse(res, { message: 'Post status updated', data: post });
 }
 
-/**
- * @swagger
- * /admin/posts/{id}:
- *   delete:
- *     summary: Hard-remove a post (irreversible soft delete)
- *     tags: [Admin]
- */
 async function deletePost(req, res) {
   await adminService.deletePost(req.user.id, req.params.id, req.body.reason);
   return successResponse(res, { message: 'Post removed' });
