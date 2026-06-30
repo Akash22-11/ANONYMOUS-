@@ -16,7 +16,7 @@ const ROLE_LEVEL = Object.freeze({
 
 const ADMIN_ROLES = [ROLES.ADMIN, ROLES.SUPER_ADMIN];
 
-// Which roles can act as mentors
+
 const MENTOR_ROLES = [ROLES.MENTOR, ROLES.ADMIN, ROLES.SUPER_ADMIN];
 
 function hasMinimumRole(role, requiredRole) {
