@@ -1,4 +1,3 @@
-// src/constants/statusCodes.js
 
 const HTTP = Object.freeze({
   OK:                    200,
